@@ -1,0 +1,231 @@
+<!-- 
+	Demo page for the MsgQ HTTP interface.
+	
+	By Rob McGuire-Dale, November 2010
+	Licensed under the GPLv2 (http://www.gnu.org/licenses/gpl-2.0.html)
+-->
+<html>
+	<head>
+		<title>MsgQ Demo</title>
+		<style>
+			body{
+				font-family: Verdana, Arial, Helvetica, sans-serif;
+				font-size: 14px;
+			}
+			#header{
+				border-bottom: 1px solid gray;
+				background-color: lightgray;
+				padding: 10px;
+				font-size: 200%;
+				margin: 0px;
+				font-weight:bold;
+			}
+			#content{
+				margin: auto;
+				width: 500px;
+			}
+			#footer{
+				text-align:right;
+				font-size:10px;
+				color: gray;
+				border-top: 1px solid gray;
+				background-color: lightgray;
+				margin-top: 20px;
+				padding: 10px;
+			}
+			.section>.header{
+				font-size: 150%;
+				font-weight: bold;
+				border-bottom: 1px solid lightgray;
+				padding-bottom: 5px;
+			}
+			table{
+				width: 100%;
+			}
+			input{
+				width: 100%
+			}
+			code{
+				display:block;
+				font-family:monospace;
+				margin-top:5px;
+			}
+			.fieldTitle{
+				font-weight:bold;
+			}
+			.section{
+				margin-top: 30px;
+				padding: 10px;
+				border: 1px solid lightgray;
+			}
+		</style>
+		<script src="demo/jquery.min.js" type="text/javascript"></script>
+		<script type="text/javascript">
+			$(document).ready(function(){
+				
+				// POP button event
+				$("#push-goBtn").click(function(){
+					sFormData = $("#push-form").serialize()
+					$("#push-command").html("/push?"+sFormData);
+					$.ajax({
+						url: "push",
+						data: $("#push-form").serialize(),
+						success: function(response){
+							$("#push-response").html(response);
+						},
+						error: function(response){
+							$("#push-response").html("Request error! (Is the "+
+									"server running?)");
+						}
+					});
+				});
+				
+				// POP button event
+				$("#pop-goBtn").click(function(){
+					sFormData = $("#pop-form").serialize();
+					$("#pop-command").html("/pop?"+sFormData);
+					$("#pop-response").html("<img src='demo/spinnything.gif'>");
+					$.ajax({
+						url: "pop",
+						data: sFormData,
+						success: function(response){
+							$("#pop-response").html(response);
+						},
+						error: function(response){
+							$("#pop-response").html("Request error! (Is the "+
+									"server running?)");
+						}
+					});
+				});
+			});
+		</script>
+	</head>
+	<body>
+		<div id='header'>
+			MsgQ Demo
+		</div>
+
+		<div id='content'>
+			<p>
+				This demonstrates how you can use the HTTP interface to MsgQ. 
+			</p>
+			<p>
+				It can also demonstrate how to facilitate (almost) instant 
+				server-to-client communication by trying to pop from an empty queue
+				with a wait time of, for example, -1, and then pushing to that same
+				queue. You will see how the pop mechanism waits while the queue is
+				empty, and then returns as soon as it gets a message.
+			</p>
+
+			<!-- PUSH -->
+			<div id='push' class='section'>
+				<div class='header'>
+					Push
+				</div>
+				<code>http://example.com:8080/push?queue=foo&msg=bar</code>
+				<p>
+					Push a message onto the specified queue. A response of '0' means it
+					pushed the message successfully.
+				</p>
+				<form id="push-form">
+					<table>
+						<tr>
+							<td class='fieldTitle'>
+								Queue:
+							</td>
+							<td>
+								<input type="text" name="queue"/>
+							</td>
+						</tr>
+						<tr>
+							<td class='fieldTitle'>
+								Message:
+							</td>
+							<td>
+								<input type="text" name="msg"/>
+							</td>
+						</tr>
+					</table>
+					<p>
+						[<a href='javascript:void(0)' id="push-goBtn">Go!</a>]
+					</p>
+					<table id='push-responseTable'>
+						<tr>
+							<td class='fieldTitle'>
+								Command:
+							</td>
+							<td id='push-command'></td>
+						</tr>
+						<tr>
+							<td class='fieldTitle'>
+								Response:
+							</td>
+							<td id='push-response'></td>
+						</tr>
+					</table>
+				</form>
+			</div>
+			
+			<!-- POP -->
+			<div id='pop' class='section'>
+				<div class='header'>
+					Pop
+				</div>
+				<code>
+					http://example.com:8080/pop?queue=foo
+					<br>
+					http://example.com:8080/pop?queue=foo&wait=-1
+				</code>
+				<p>
+					Pop a message off of the specified queue. If the queue is empty, it
+					will return {{empty queue}}. You may optionally enter a timeout to
+					cause the server to block until either the queue gets a message, at
+					which point it will return the message immediatly, or it times out,
+					at which point it will return {{timed out}}
+				</p>
+				<form id="pop-form">
+					<table>
+						<tr>
+							<td class='fieldTitle'>
+								Queue:
+							</td>
+							<td>
+								<input type="text" name="queue"/>
+							</td>
+						</tr>
+						<tr>
+							<td class='fieldTitle'>
+								Timeout in milliseconds (optional):
+							</td>
+							<td>
+								<input type="text" name="wait"/>
+							</td>
+						</tr>
+					</table>
+					<p>
+						[<a href='javascript:void(0)' id="pop-goBtn">Go!</a>]
+					</p>
+					<table id='pop-responseTable'>
+						<tr>
+							<td class='fieldTitle'>
+								Command:
+							</td>
+							<td id='pop-command'></td>
+						</tr>
+						<tr>
+							<td class='fieldTitle'>
+								Response:
+							</td>
+							<td id='pop-response'></td>
+						</tr>
+					</table>
+				</form>
+			</div>
+		</div>
+		
+		<!-- footer -->
+		<div id='footer'>
+			By Rob McGuire-Dale, November 2010
+		</div>
+	</body>
+</html>
