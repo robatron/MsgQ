@@ -4,20 +4,32 @@ MsgQ is short for "Message Queue". It is a simple, web-based utility that allows
 
 This is based on the idea of the [messenger component](http://trac.osuosl.org/git/?p=touchscreen.git;a=blob_plain;f=core/messenger.tac;hb=c60491d32feb22ade5aa6abc6bbf925c12c3f427) of the [Touchscreen project](http://trac.osuosl.org/trac/touchscreen).
 
+## Installation
+
+First, `cd` into a directory of your choice, and download the MsgQ source
+
+	cd /path/to/installation/directory
+    git clone git://github.com/robatron/MsgQ.git
+
+`cd` into the MsgQ directory, and copy the distributed config file to a working config file
+
+    cd MsgQ
+	cp msgq-serv.config.dist msgq-serv.config
+
+Install Python and CherryPy. If you're on Ubuntu (like me), you should be able to install both with the following:
+
+    sudo apt-get install python-cherypy3
+
+Dependancies:
+
+ - Python >= v2.6.5
+ - CherryPy >= v3.1.2
+
 ## Server-side setup
 
 To start MsgQ, just run 
 
     python msgq-serv.py
-
-### Dependancies
-
- - Python >= v2.6.5
- - CherryPy >= v3.1.2
-
-If you're on Ubuntu (like me), you should be able to simply run the following command to install them both:
-
-    sudo apt-get install python-cherrypy
 
 ## Client-side usage
 
