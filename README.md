@@ -2,6 +2,8 @@
 
 MsgQ is short for "Message Queue". It is a simple, web-based utility that allows one to push and pop messages off of a queue. There is also an optional blocking mechanism that allows the server to act "busy" while waiting for a message. This is handy for (almost) instant server-to-client communication.
 
+You can[view a live demo here](http://robmd.net:8080)
+
 This is based on the idea of the [messenger component](http://trac.osuosl.org/git/?p=touchscreen.git;a=blob_plain;f=core/messenger.tac;hb=c60491d32feb22ade5aa6abc6bbf925c12c3f427) of the [Touchscreen project](http://trac.osuosl.org/trac/touchscreen).
 
 ## Installation
@@ -65,10 +67,6 @@ Setting `wait` to a negative number will result in it waiting indefinitely.
 
 ### Demo
 
-You can view an interactive demo by starting the server and going to `/demo` or the root:
+You can view an interactive demo by starting the server and going to `/demo`
 
     http://localhost:8080/demo
-
-or
-
-    http://localhost:8080/
