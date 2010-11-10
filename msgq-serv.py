@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 from os import path
+import string
 import cherrypy
 from msgq import *
 
@@ -30,6 +31,10 @@ def main():
 		}
 	}
 	
+	# pull in the socket host and port info from the config files
+	configFilename = string.replace(__file__, ".py", "")+".config"
+	cherrypy.config.update(configFilename)
+
 	# start the CherryPy server with the MsgQ doc root map
 	cherrypy.quickstart(msgq_serv(), config=conf)
 
