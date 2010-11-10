@@ -51,19 +51,17 @@ To pop a message off of a queue, you only need to specify the `queue`. In the fo
 
     http://localhost:8080/pop?queue=fooQ
 
-The top message on the specified queue will be returned. Trying to pop a message off of a deleted queue will result in a "{{empty queue}}" being returned.
+The top message on the specified queue will be returned. Trying to pop a message off of an empty queue will result in a "{{empty queue}}" being returned.
 
-#### Waiting for a message
+Optionally, you can make MsgQ wait for a message to be placed on the queue. This will cause MsgQ to look "busy" to the client while it waits. This is handy for (almost) instant server-to-client communication. Make MsgQ wait by setting the `wait` parameter to the number of milliseconds the queue should wait before it times out, and reports "{{empty queue}}". 
 
-Optionally, you can make MsgQ wait for a message to be placed on the queue. This will cause MsgQ to look "busy" to the client while it waits. This is handy for (almost) instant server-to-client communication. 
-
-Make MsgQ wait by setting the `wait` parameter to the number of milliseconds the queue should wait before it times out, and reports "{{empty queue}}". In the following example, MsgQ will wait for 5 seconds:
+In the following example, MsgQ will wait for 5 seconds:
 
     http://localhost:8080/pop?queue=fooQ&wait=5000
 
 If a message gets placed on the queue while it's waiting, MsgQ will return with it right away. If no message gets placed on the queue before the wait time is up, it will return with an "{{empty queue}}".
 
-Setting `wait` to a negative number will result in it waiting indefinitely.
+**Note:** Setting `wait` to a negative number will result in it waiting indefinitely.
 
 ### Demo
 
